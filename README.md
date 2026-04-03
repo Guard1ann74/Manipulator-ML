@@ -73,7 +73,7 @@
 После запуска сразу всплыла следующая ошибка: 
 ```
 File "C:\Users\Holo\PycharmProjects\Manipularor + ML\model\train.py", line 38, in main
-clf = LogisticRegression(max_iter=1000, class_weight='balanced')
+clf = LogisticRegression(max_iter=1000, multi_class='ovr', class_weight='balanced')
 TypeError: LogisticRegression.__init__() got an unexpected keyword argument 'multi_class'
 ```
 Проверил версию scikit-learn, версия последняя, значит проблема в другом. В коде есть одно предупреждение: *Unexpected argument* — `clf = LogisticRegression(max_iter=1000, multi_class='ovr', class_weight='balanced')`. Попробую убрать аргумент `multi_class`.
