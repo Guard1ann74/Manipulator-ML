@@ -78,7 +78,7 @@ TypeError: LogisticRegression.__init__() got an unexpected keyword argument 'mul
 ```
 Проверил версию scikit-learn, версия последняя, значит проблема в другом. В коде есть одно предупреждение: *Unexpected argument* — `clf = LogisticRegression(max_iter=1000, multi_class='ovr', class_weight='balanced')`. Попробую убрать аргумент `multi_class`.
 
-**Тест 2. Все заработало!**
+**Тест 2. Все заработало!** 
 
 Обучение прошло успешно, в терминале получил следующий вывод
 ```
