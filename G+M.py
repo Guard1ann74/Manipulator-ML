@@ -19,7 +19,7 @@ a = 1
 while a > 0:
     motion_pose = MotionPose()
     motion_pose.pt = const.JOINT
-    motion_pose.joint.j1 = -290.568
+    motion_pose.joint.j1 = 0
     motion_pose.joint.j2 = 84.549
     motion_pose.joint.j3 = -120.821
     motion_pose.joint.j4 = 134.360

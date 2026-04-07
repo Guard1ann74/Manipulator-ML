@@ -10,13 +10,13 @@ def load_data(file_path, label):
     return texts, [label] * len(texts)
 
 def main():
-    up_texts, up_labels = load_data('data/up.txt', 1)       # класс 1 = вверх
-    down_texts, down_labels = load_data('data/down.txt', 2)  # класс 2 = вниз
+    up_texts, up_labels = load_data('data/left.txt', 1)       # класс 1 = влево
+    down_texts, down_labels = load_data('data/right.txt', 2)  # класс 2 = вправо
     other_texts, other_labels = load_data('data/other.txt', 0)  # класс 0 = прочее
 
     all_texts = up_texts + down_texts + other_texts
     all_labels = up_labels + down_labels + other_labels
-    print(f"Загружено примеров: up={len(up_texts)}, down={len(down_texts)}, other={len(other_texts)}")
+    print(f"Загружено примеров: left={len(up_texts)}, right={len(down_texts)}, other={len(other_texts)}")
 
     X_train, X_test, y_train, y_test = train_test_split(
         all_texts, all_labels,
@@ -24,8 +24,7 @@ def main():
         random_state=42,
         stratify=all_labels
     )
-
-    vectorizer = TfidfVectorizer(ngram_range=(1, 2), max_features=10000)
+    vectorizer = TfidfVectorizer(ngram_range=(1, 3), max_features=20000)
     X_train_vec = vectorizer.fit_transform(X_train)
     X_test_vec = vectorizer.transform(X_test)
 
@@ -38,7 +37,7 @@ def main():
     print("\nМатрица ошибок:")
     print(confusion_matrix(y_test, y_pred))
     print("\nИтоговые результаты:")
-    print(classification_report(y_test, y_pred, target_names=['other', 'up', 'down']))
+    print(classification_report(y_test, y_pred, target_names=['other', 'left', 'right']))
 
     joblib.dump(vectorizer, 'models/vectorizer.pkl')
     joblib.dump(clf, 'models/classifier.pkl')
