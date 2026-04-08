@@ -2,7 +2,6 @@ from Agilebot.IR.A.arm import Arm
 from Agilebot.IR.A.status_code import StatusCodeEnum
 from Agilebot.IR.A.sdk_types import PoseType, RobotStatusEnum, ServoStatusEnum
 from Agilebot.IR.A.sdk_classes import MotionPose
-from Agilebot.IR.A.sdk_classes import Posture
 import time
 
 def wait_until_settled(arm: Arm, *, poll_s: float = 0.05, timeout_s: float = 30.0) -> None:
