@@ -656,7 +656,7 @@ class MvCamera():
     #  @param  enRenderMode                [IN]            Render mode, Windows:0-GDI 1-D3D 2-OpenGL Linux:0-OpenGL
     #  @return Success, return MV_OK. Failure, return error code
     #  @remarks OpenGL rendering mode can be selected, supporting three pixel formats: PixelType_Gvsp_RGB8_Packed，PixelType_Gvsp_BGR8_Packed，and PixelType_Gvsp_Mono8 for rendering images with a size exceeding 4GB. 
-    #        Note that, other rendering modes are not supported.
+    #        Note that, other.txt rendering modes are not supported.
     #        If the image size does not exceed 4GB, the rendering supports width and height to int type.
     #        When the render mode is D3D, the maximum resolution supported is 16384 # 163840.
     #        When calling, the value of nImageLen in the MV_CC_IMAGE structure needs to be input.
@@ -1256,7 +1256,7 @@ class MvCamera():
     #  @~english
     #  @brief  Read Memory
     #  @param  handle                      [IN]            Device Handle/Frame grabber handle
-    #  @param  pBuffer                     [IN][OUT]       Used as a return value, save the read-in memory value ( The memory value of GEV devices is stored in the big end mode, with the capture card device and the camera under the capture card stored in the big end mode, and other protocol devices stored in the small end mode)
+    #  @param  pBuffer                     [IN][OUT]       Used as a return value, save the read-in memory value ( The memory value of GEV devices is stored in the big end mode, with the capture card device and the camera under the capture card stored in the big end mode, and other.txt protocol devices stored in the small end mode)
     #  @param  nAddress                    [IN]            Memory address to be read, which can be obtained from the Camera.xml file of the device, the form xml node value of xxx_RegAddr
     #  @param  nLength                     [IN]            Length of the memory to be read
     #  @return Success, return MV_OK. Failure, return error code 
@@ -1279,7 +1279,7 @@ class MvCamera():
     #  @~english
     #  @brief  Write Memory
     #  @param  handle                      [IN]            Device Handle/Frame grabber handle
-    #  @param  pBuffer                     [IN]            Memory value to be written ( Note The memory value of GEV devices is stored in the big end mode, with the capture card device and the camera under the capture card stored in the big end mode, and other protocol devices stored in the small end mode)
+    #  @param  pBuffer                     [IN]            Memory value to be written ( Note The memory value of GEV devices is stored in the big end mode, with the capture card device and the camera under the capture card stored in the big end mode, and other.txt protocol devices stored in the small end mode)
     #  @param  nAddress                    [IN]            Memory address to be written, which can be obtained from the Camera.xml file of the device, the form xml node value of xxx_RegAddr
     #  @param  nLength                     [IN]            Length of the memory to be written
     #  @return Success, return MV_OK. Failure, return error code 
@@ -2156,7 +2156,7 @@ class MvCamera():
     #  @return Success, return MV_OK. Failure, return error code 
     #  @remarks This API is supported only by CameraLink device.
     #        This API support calls when devices are not connected. But it is necessary to connect to the device first when accessing a CameraLink Device through the GenTL protocol.
-    #        Due to hardware/system/external interference and other factors, configuring a high baud rate may cause abnormal communication. 
+    #        Due to hardware/system/external interference and other.txt factors, configuring a high baud rate may cause abnormal communication.
     #        It is recommended to configure a baud rate of less than 115200
 
     def MV_CAML_SetDeviceBaudrate(self, nBaudrate):
@@ -2277,7 +2277,7 @@ class MvCamera():
     #  @param  handle                      [IN]            Device handle
     #  @param  nTransferWays               [IN]            Transfer ways，rang：1-10
     #  @return Success, return MV_OK. Failure, return error code 
-    #  @remarks Users can adjust this parameter according to PC performance, camera image frame rate, image size, memory utilization and other factors. But different PCS and different USB expansion CARDS have different compatibility.
+    #  @remarks Users can adjust this parameter according to PC performance, camera image frame rate, image size, memory utilization and other.txt factors. But different PCS and different USB expansion CARDS have different compatibility.
     def MV_USB_SetTransferWays(self, nTransferWays):
         MvCamCtrldll.MV_USB_SetTransferWays.argtype = (c_void_p, c_uint)
         MvCamCtrldll.MV_USB_SetTransferWays.restype = c_uint
@@ -2384,7 +2384,7 @@ class MvCamera():
     #  @return Success, return MV_OK. Failure, return error code 
     #  @remarks The memory of the Interfaces list is allocated within the SDK. When the interface is invoked by multiple threads, the memory of the device list will be released and applied.\n
     #    It is recommended to avoid multithreaded enumeration operations as much as possible.
-    #    Currently not supported for SDK to directly call MvProducerU3V. cti and MvProducerGEV. cti. supports calling other. cti
+    #    Currently not supported for SDK to directly call MvProducerU3V. cti and MvProducerGEV. cti. supports calling other.txt. cti
     def MV_CC_EnumInterfacesByGenTL(stIFList, strGenTLPath):
         MvCamCtrldll.MV_CC_EnumInterfacesByGenTL.argtype = (c_void_p, c_void_p)
         MvCamCtrldll.MV_CC_EnumInterfacesByGenTL.restype = c_uint

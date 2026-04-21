@@ -30,7 +30,7 @@ def main():
     all_texts = forward_texts + backward_texts + left_texts + right_texts + other_texts
     all_labels = forward_labels + backward_labels + left_labels + right_labels + other_labels
 
-    print(f"Загружено: forward={len(forward_texts)}, backward={len(backward_texts)}, left={len(left_texts)}, right={len(right_texts)}, other={len(other_texts)}")
+    print(f"Загружено: forward={len(forward_texts)}, backward={len(backward_texts)}, left={len(left_texts)}, right={len(right_texts)}, other.txt={len(other_texts)}")
     print(f"Всего примеров: {len(all_texts)}")
 
     X_train, X_test, y_train, y_test = train_test_split(
@@ -42,7 +42,7 @@ def main():
     print(f"Обучающая выборка: {len(X_train)},\nтестовая: {len(X_test)}")
 
     #Векторизация TF-IDF
-    vectorizer = TfidfVectorizer(ngram_range=(1, 2), max_features=15000)
+    vectorizer = TfidfVectorizer(ngram_range=(1, 3), max_features=20000)
     X_train_vec = vectorizer.fit_transform(X_train)
     X_test_vec = vectorizer.transform(X_test)
 
@@ -63,11 +63,11 @@ def main():
     kappa = cohen_kappa_score(y_test, y_pred)
     print(f"Cohen's Kappa: {kappa:.4f}")
 
-    target_names = ['other', 'forward', 'backward', 'left', 'right']
+    target_names = ['other.txt', 'forward', 'backward', 'left', 'right']
     print(classification_report(y_test, y_pred, target_names=target_names))
 
     cm = confusion_matrix(y_test, y_pred)
-    print("\n▶ Confusion matrix:")
+    print("\nConfusion matrix:")
     print(cm)
 
     y_test_bin = label_binarize(y_test, classes=[0, 1, 2, 3, 4])
