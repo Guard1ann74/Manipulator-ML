@@ -4,11 +4,8 @@ from manipulator_control import (
     move_home, init_arm, disconnect_arm
 )
 
-print("Система запущена")
-
-# Инициализация манипулятора
 arm = init_arm()
-
+print("Система запущена")
 print("\nПеремещение манипулятора в начальную точку")
 move_home(arm)
 print("Манипулятор в начальной точк\n")
