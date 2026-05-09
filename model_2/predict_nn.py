@@ -1,48 +1,18 @@
-import torch
-import pickle
+import joblib
+import numpy as np
+import warnings
+from sentence_transformers import SentenceTransformer
+from transformers import logging as transformers_logging
 
-EMBED_DIM = 64
-HIDDEN_DIM = 128
-NUM_CLASSES = 5
-MAX_LEN = 10
-DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+transformers_logging.set_verbosity_error()
 
-from model_2.train_nn import CommandClassifier
+# Отключаем лишние предупреждения от библиотек
+warnings.filterwarnings("ignore")
 
-# Загрузка словаря
-with open('model_2/models/vocab.pkl', 'rb') as f:
-    vocab = pickle.load(f)
-VOCAB_SIZE = len(vocab)
-
-# Загрузка модели
-model = CommandClassifier(VOCAB_SIZE, EMBED_DIM, HIDDEN_DIM, NUM_CLASSES).to(DEVICE)
-model.load_state_dict(torch.load('model_2/models/nn_model_best.pth', map_location=DEVICE))
-model.eval()
-
-
-def text_to_sequence(text, max_len=MAX_LEN):
-    words = text.lower().split()[:max_len]
-    seq = [vocab.get(word, 1) for word in words]
-    seq += [0] * (max_len - len(seq))
-    return seq
-
-
-def recognize(text, threshold=0.6):
-    seq = text_to_sequence(text)
-    input_tensor = torch.LongTensor([seq]).to(DEVICE)
-
-    with torch.no_grad():
-        outputs = model(input_tensor)
-        probs = torch.softmax(outputs, dim=1)
-        confidence, pred = torch.max(probs, 1)
-
-    label = pred.item()
-    conf = confidence.item()
-
-    if conf < threshold:
-        return -1, conf
-    return label, conf
-
+# Загружаем языковую модель и наш обученный классификатор
+# Это происходит один раз при импорте файла
+embedder = SentenceTransformer('cointegrated/rubert-tiny2')
+clf = joblib.load('model_transform/intent_classifier.pkl')
 
 label_to_command = {
     0: None,
@@ -53,10 +23,43 @@ label_to_command = {
 }
 
 
+def recognize(text, threshold=0.75):
+    text = text.lower().strip()
+    emb = embedder.encode([text])
+
+    # 2. Получаем вероятности для каждого класса [0, 1, 2, 3, 4]
+    probs = clf.predict_proba(emb)[0]
+
+    # 3. Находим самый вероятный класс и его уверенность
+    max_prob = np.max(probs)
+    label = clf.classes_[np.argmax(probs)]
+
+    # Если уверенность ниже порога - считаем, что команду не поняли
+    if max_prob < threshold:
+        return -1, max_prob
+
+    return label, max_prob
+
+
 def check_answer(user_input):
-    label, conf = recognize(user_input, threshold=0.6)
+    # Порог чуть снизим, 0.45 (45%) для 5 классов с запасом отсекает случайности
+    label, conf = recognize(user_input, threshold=0.45)
+
+    # Получаем "сырую" догадку модели в любом случае (для отладки)
+    emb = embedder.encode([user_input])
+    raw_probs = clf.predict_proba(emb)[0]
+    raw_label = clf.classes_[np.argmax(raw_probs)]
+    raw_command = label_to_command.get(raw_label, "Other")
 
     if label == -1 or label == 0:
-        return 0, f"Действие не распознано | Уверенность: {conf:.2%}", -1
+        return 0, f"Действие не распознано (Склонялся к: {raw_command}) | Уверенность: {conf:.2%}", -1
     else:
         return 1, f"Действие выполнено: {label_to_command[label]} | Уверенность: {conf:.2%}", label
+
+if __name__ == "__main__":
+    while True:
+        text = input("> ")
+        if text.lower() == 'exit':
+            break
+        status, msg, cmd = check_answer(text)
+        print(msg)
